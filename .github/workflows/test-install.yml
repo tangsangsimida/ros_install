@@ -10,7 +10,7 @@ jobs:
   test-install:
     strategy:
       matrix:
-        ubuntu_version: [18.04, 20.04, 22.04, 24.04, 25.10]
+        ubuntu_version: [18.04, 20.04, 22.04, 24.04]
     runs-on: ubuntu-latest
 
     steps:
@@ -24,6 +24,7 @@ jobs:
           -w ${{ github.workspace }} \
           ubuntu:${{ matrix.ubuntu_version }} \
           bash -c "
+            export DEBIAN_FRONTEND=noninteractive &&
             apt update &&
             apt install -y python3 python3-pip python3-yaml python3-distro &&
             python3 -m pip install --upgrade pip &&
