@@ -74,7 +74,7 @@ def main():
 
 
     # 使用量统计 
-    CmdTask("wget https://fishros.org.cn/forum/topic/1733 -O /tmp/t1733 -q  --timeout 10 && rm -rf /tmp/t1733").run()
+    CmdTask("wget https://fishros.org.cn/forum/topic/1733 -O /tmp/t1733 -q --no-check-certificate --timeout 10 && rm -rf /tmp/t1733").run()
 
     PrintUtils.print_success(tr.tr("已为您切换语言至当前所在国家语言:")+tr.lang)
     if tr.country != 'CN':

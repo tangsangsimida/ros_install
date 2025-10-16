@@ -1,6 +1,6 @@
 # 测试配置文件，用于 GitHub Actions 自动化测试
 # 格式: chooses: [{choose: <选项ID>, desc: <选项描述>}]
-# 请注意，在github工作流测试中，不需要使用国内的镜像源，直接使用官方的源即可
+# 请注意: 在github工作流测试中，不需要使用国内的镜像源，直接使用官方的源即可
 
 # 测试用例1: 安装 ROS
 - name: "Install ROS"
