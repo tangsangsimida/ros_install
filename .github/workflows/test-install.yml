@@ -2,9 +2,9 @@ name: Test Install Script
 
 on:
   push:
-    branches: [ dev, master ]
+    branches: [ dev, master, github_ci_docker_test ]
   pull_request:
-    branches: [ dev, master ]
+    branches: [ dev, master, github_ci_docker_test ]
 
 jobs:
   test-install:
