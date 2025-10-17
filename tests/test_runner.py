@@ -312,7 +312,7 @@ def main():
     else:
         print("未指定目标系统版本")
     
-    config_file = "fish_install_test.yaml"
+    config_file = "./tests/fish_install_test.yaml"
     
     # 检查配置文件是否存在
     if not os.path.exists(config_file):
