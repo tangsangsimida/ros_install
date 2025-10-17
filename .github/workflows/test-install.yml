@@ -24,6 +24,7 @@ jobs:
           -w ${{ github.workspace }} \
           ubuntu:${{ matrix.ubuntu_version }} \
           bash -c "
+            set -u && 
             export DEBIAN_FRONTEND=noninteractive &&
             apt update &&
             apt install -y locales &&
@@ -36,7 +37,7 @@ jobs:
             pip install --upgrade pip &&
             pip install pyyaml distro &&
             cd tests && 
-            PYTHONIOENCODING=utf-8 python3 test_runner.py
+            PYTHONIOENCODING=utf-8 python3 -u test_runner.py
           "
     - name: Upload test reports
       uses: actions/upload-artifact@v4
