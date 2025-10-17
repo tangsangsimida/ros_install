@@ -265,7 +265,7 @@ def run_install_test(test_case):
                 print(f"测试失败: {name} (脚本中检测到错误)")
             return False, output
     except subprocess.TimeoutExpired:
-        print(f"测试超时: {name} (超过600秒)")
+        print(f"测试超时: {name} (超过3600秒)")
         # 终止进程
         process.kill()
         stdout, _ = process.communicate()
