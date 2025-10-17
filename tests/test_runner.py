@@ -300,6 +300,17 @@ def run_install_test(test_case):
 
 def main():
     """主函数"""
+    # 解析命令行参数
+    parser = argparse.ArgumentParser(description='运行一键安装工具测试')
+    parser.add_argument('--target-os-version', type=str, help='目标Ubuntu版本代号 (例如: bionic, focal, jammy, noble)')
+    args = parser.parse_args()
+    
+    target_os_version = args.target_os_version
+    if target_os_version:
+        print(f"目标系统版本: {target_os_version}")
+    else:
+        print("未指定目标系统版本")
+    
     config_file = "fish_install_test.yaml"
     
     # 检查配置文件是否存在
@@ -308,12 +319,28 @@ def main():
         sys.exit(1)
     
     # 加载测试用例
-    test_cases = load_test_cases(config_file)
-    if not test_cases:
+    all_test_cases = load_test_cases(config_file)
+    if not all_test_cases:
         print("错误: 没有找到有效的测试用例")
         sys.exit(1)
     
-    print(f"共找到 {len(test_cases)} 个测试用例")
+    # 根据目标系统版本过滤测试用例
+    if target_os_version:
+        test_cases = [tc for tc in all_test_cases if tc.get('target_os_version') == target_os_version]
+        if not test_cases:
+            # 如果没有找到特定于该系统的测试用例，则运行所有没有指定target_os_version的测试用例
+            test_cases = [tc for tc in all_test_cases if 'target_os_version' not in tc]
+            if not test_cases:
+                print(f"错误: 没有找到适用于系统版本 {target_os_version} 的测试用例")
+                sys.exit(1)
+    else:
+        # 如果没有指定目标系统版本，则运行所有没有指定target_os_version的测试用例
+        test_cases = [tc for tc in all_test_cases if 'target_os_version' not in tc]
+        if not test_cases:
+            print("错误: 没有找到适用于所有系统的通用测试用例")
+            sys.exit(1)
+    
+    print(f"共找到 {len(test_cases)} 个适用于当前系统版本的测试用例")
     
     # 运行所有测试用例并收集结果
     results = []
