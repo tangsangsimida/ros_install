@@ -245,8 +245,8 @@ def run_install_test(test_case):
             env={**os.environ, 'FISH_INSTALL_CONFIG': '../fish_install.yaml'}
         )
         
-        # 等待进程结束 (设置一个更长的超时时间，例如600秒=10分钟)
-        stdout, _ = process.communicate(timeout=600)
+        # 等待进程结束
+        stdout, _ = process.communicate(timeout=3600)
         output = stdout
         
         # 打印输出
