@@ -13,6 +13,13 @@ import argparse
 # 将项目根目录添加到 Python 路径中，以便能找到 tools 模块
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
+# 导入 distro 库以获取系统版本代号
+try:
+    import distro
+    HAVE_DISTRO = True
+except ImportError:
+    HAVE_DISTRO = False
+
 def load_test_cases(config_file):
     """加载测试用例"""
     try:
@@ -22,6 +29,39 @@ def load_test_cases(config_file):
     except Exception as e:
         print(f"加载测试配置文件失败: {e}")
         return []
+
+
+def get_ubuntu_codename():
+    """获取Ubuntu系统的版本代号"""
+    if HAVE_DISTRO:
+        # 使用 distro 库获取系统信息
+        codename = distro.codename()
+        if codename:
+            return codename.lower()
+    
+    # 备用方法：尝试使用 lsb_release 命令
+    try:
+        result = subprocess.run(['lsb_release', '-cs'], capture_output=True, text=True, timeout=10)
+        if result.returncode == 0:
+            return result.stdout.strip().lower()
+    except (subprocess.TimeoutExpired, FileNotFoundError):
+        pass
+    
+    # 备用方法：从 /etc/os-release 文件中读取
+    try:
+        with open('/etc/os-release', 'r') as f:
+            for line in f:
+                if line.startswith('UBUNTU_CODENAME='):
+                    codename = line.split('=')[1].strip().strip('"')
+                    return codename.lower()
+                elif line.startswith('VERSION_CODENAME='):
+                    codename = line.split('=')[1].strip().strip('"')
+                    return codename.lower()
+    except FileNotFoundError:
+        pass
+    
+    # 如果所有方法都失败，返回 None
+    return None
 
 def check_output_for_errors(output):
     """检查输出中是否包含错误信息"""
@@ -310,9 +350,14 @@ def main():
     if target_os_version:
         print(f"目标系统版本: {target_os_version}")
     else:
-        print("未指定目标系统版本")
+        # 自动检测系统版本代号
+        target_os_version = get_ubuntu_codename()
+        if target_os_version:
+            print(f"自动检测到系统版本: {target_os_version}")
+        else:
+            print("未指定目标系统版本，也未能自动检测到系统版本")
     
-    config_file = "./tests/fish_install_test.yaml"
+    config_file = "fish_install_test.yaml"
     
     # 检查配置文件是否存在
     if not os.path.exists(config_file):
