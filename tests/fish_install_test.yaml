@@ -3,7 +3,7 @@
 # 请注意: 在github工作流测试中，不需要使用国内的镜像源，直接使用官方的源即可
 
 # # 测试用例local: 本地工作流测试安装 ROS
-# - name: "Install ROS"
+# - name: "Install_ROS_Local"
 #   chooses:
 #     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
 #     - { choose: 1, desc: "更换系统源再继续安装" }
@@ -14,7 +14,7 @@
 #     - { choose: 1, desc: "桌面端完整版" }
 
 # 测试用例1: 安装 ROS (GitHub Actions)
-- name: "Install ROS"
+- name: "Install_ROS_GitHub_Actions"
   chooses:
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
