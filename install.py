@@ -122,9 +122,9 @@ def main():
         download_tools(code,tools,url_prefix)
         run_tool_file(tools[code]['tool'].replace("/","."))
     
-    # 检查是否在 GitHub Actions 环境中运行
+    # 检查是否在 GitHub Actions 环境中运行或使用了测试配置文件
     # 如果是，则跳过生成配置文件和后续的打印操作，因为这些操作需要用户输入
-    if os.environ.get('GITHUB_ACTIONS') != 'true':
+    if os.environ.get('GITHUB_ACTIONS') != 'true' and os.environ.get('FISH_INSTALL_CONFIG') is None:
         config_helper.gen_config_file()
         
         PrintUtils.print_delay(tr.tr("欢迎加入机器人学习交流QQ群：438144612(入群口令：一键安装)"),0.05)
