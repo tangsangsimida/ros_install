@@ -19,13 +19,15 @@ jobs:
 
     - name: Run tests in Docker container
       run: |
-        docker run --rm \
-          -v ${{ github.workspace }}:${{ github.workspace }} \
-          -w ${{ github.workspace }} \
-          ubuntu:${{ matrix.ubuntu_version }} \
+        docker run --rm 
+          -v ${{ github.workspace }}:${{ github.workspace }} 
+          -w ${{ github.workspace }} 
+          ubuntu:${{ matrix.ubuntu_version }} 
           bash -c "
             set -u && 
             export DEBIAN_FRONTEND=noninteractive &&
+            # Set timezone to avoid tzdata interactive prompt
+            ln -sf /usr/share/zoneinfo/UTC /etc/localtime &&
             apt update &&
             apt install -y locales &&
             locale-gen en_US.UTF-8 &&
