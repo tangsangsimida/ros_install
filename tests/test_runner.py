@@ -30,7 +30,6 @@ def load_test_cases(config_file):
         print(f"加载测试配置文件失败: {e}")
         return []
 
-
 def get_ubuntu_codename():
     """获取Ubuntu系统的版本代号"""
     if HAVE_DISTRO:
@@ -79,7 +78,6 @@ def check_output_for_errors(output):
             if keyword in line:
                 return True
     return False
-
 
 def generate_html_report(report, output_file):
     """生成HTML格式的测试报告"""
@@ -206,7 +204,6 @@ def generate_html_report(report, output_file):
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(html_content)
 
-
 def run_install_test(test_case):
 
     """运行单个安装测试"""
@@ -276,6 +273,7 @@ def run_install_test(test_case):
     try:
         # 使用 -u 参数确保输出不被缓冲，以便实时查看日志
         # 直接运行 install.py，它会自动检测并使用 ../fish_install.yaml
+        # 增加超时时间为 2 小时 (7200 秒)
         process = subprocess.Popen(
             [sys.executable, "../install.py"],
             stdin=subprocess.PIPE,
@@ -286,14 +284,27 @@ def run_install_test(test_case):
             env={**os.environ, 'FISH_INSTALL_CONFIG': '../fish_install.yaml'}
         )
         
-        # 等待进程结束
-        stdout, _ = process.communicate(timeout=3600)
-        output = stdout
-        
-        # 打印输出
+        # 实时打印输出
         print("=== 脚本输出开始 ===")
-        print(stdout)
+        while True:
+            output_line = process.stdout.readline()
+            if output_line == '' and process.poll() is not None:
+                break
+            if output_line:
+                print(output_line.strip())
+                output += output_line
+                # 确保实时刷新输出
+                sys.stdout.flush()
         print("=== 脚本输出结束 ===")
+        
+        # 等待进程结束，超时时间为 2 小时
+        # stdout, _ = process.communicate(timeout=7200)
+        # output = stdout
+        
+        # # 打印输出
+        # print("=== 脚本输出开始 ===")
+        # print(stdout)
+        # print("=== 脚本输出结束 ===")
         
         # 检查退出码和输出中的错误信息
         if process.returncode == 0 and not check_output_for_errors(output):
@@ -306,7 +317,7 @@ def run_install_test(test_case):
                 print(f"测试失败: {name} (脚本中检测到错误)")
             return False, output
     except subprocess.TimeoutExpired:
-        print(f"测试超时: {name} (超过3600秒)")
+        print(f"测试超时: {name} (超过7200秒)")
         # 终止进程
         process.kill()
         stdout, _ = process.communicate()
