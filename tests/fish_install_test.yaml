@@ -12,8 +12,8 @@
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
     - { choose: 4, desc: "ROS官方源 (国外用户或需要最新版本时使用)" }
-    - { choose: 3, desc: "melodic(ROS1)" }
-    - { choose: 2, desc: "桌面端完整版" }
+    - { choose: 1, desc: "支持的第一个ros版本" }
+    - { choose: 2, desc: "基础版(小)" }
 
 # Ubuntu 20.04 (focal) - Noetic 或 Foxy
 - name: "Install_ROS_focal_noetic"
@@ -22,8 +22,8 @@
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
     - { choose: 4, desc: "ROS官方源 (国外用户或需要最新版本时使用)" }
-    - { choose: 3, desc: "noetic(ROS1)" }
-    - { choose: 2, desc: "桌面端完整版" }
+    - { choose: 1, desc: "支持的第一个ros版本" }
+    - { choose: 2, desc: "基础版(小)" }
 
 - name: "Install_ROS_focal_foxy"
   target_os_version: "focal"
@@ -31,8 +31,8 @@
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
     - { choose: 4, desc: "ROS官方源 (国外用户或需要最新版本时使用)" }
-    - { choose: 3, desc: "foxy(ROS2)" }
-    - { choose: 2, desc: "桌面端完整版" }
+    - { choose: 1, desc: "支持的第一个ros版本" }
+    - { choose: 2, desc: "基础版(小)" }
 
 # Ubuntu 22.04 (jammy) - Humble
 - name: "Install_ROS_jammy"
@@ -41,8 +41,8 @@
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
     - { choose: 4, desc: "ROS官方源 (国外用户或需要最新版本时使用)" }
-    - { choose: 3, desc: "humble(ROS2)" }
-    - { choose: 2, desc: "桌面端完整版" }
+    - { choose: 1, desc: "支持的第一个ros版本" }
+    - { choose: 2, desc: "基础版(小)" }
 
 # Ubuntu 24.04 (noble) - Jazzy
 - name: "Install_ROS_noble"
@@ -51,6 +51,6 @@
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
     - { choose: 4, desc: "ROS官方源 (国外用户或需要最新版本时使用)" }
-    - { choose: 1, desc: "jazzy(ROS2)" }
-    - { choose: 2, desc: "桌面端完整版" }
+    - { choose: 1, desc: "支持的第一个ros版本" }
+    - { choose: 2, desc: "基础版(小)" }
 
