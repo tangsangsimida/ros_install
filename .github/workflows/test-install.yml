@@ -31,14 +31,23 @@ jobs:
           with open('tests/fish_install_test.yaml', 'r') as f:
               test_cases = yaml.safe_load(f)
           
-          # 为每个测试用例创建矩阵项，包含系统版本信息
+          # 为每个测试用例创建矩阵项，包含系统版本信息和批次ID
+          os_versions = {}
           matrix = {'include': []}
           for i, case in enumerate(test_cases):
               target_os = case.get('target_os_version', 'default')
+              # 为每个系统版本维护一个计数器，用于分配批次
+              if target_os not in os_versions:
+                  os_versions[target_os] = 0
+              else:
+                  os_versions[target_os] += 1
+              # 每个系统版本的测试按批次分组，每批最多2个测试
+              batch_id = os_versions[target_os] // 2
               matrix['include'].append({
                   'test_name': case['name'],
                   'test_index': i,
-                  'os_version': target_os
+                  'os_version': target_os,
+                  'batch_id': batch_id
               })
           
           print('matrix=' + json.dumps(matrix))
@@ -48,7 +57,7 @@ jobs:
     needs: generate-test-matrix
     strategy:
       matrix: ${{ fromJSON(needs.generate-test-matrix.outputs.matrix) }}
-      max-parallel: 2  # 限制同时运行的job数量
+      # 不再全局限制并行数量，而是通过批次控制每个系统版本的并行测试数量
     runs-on: ubuntu-latest
 
     steps:
