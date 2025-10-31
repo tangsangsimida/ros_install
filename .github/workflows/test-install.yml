@@ -30,15 +30,26 @@ jobs:
           import json
           with open('tests/fish_install_test.yaml', 'r') as f:
               test_cases = yaml.safe_load(f)
-          # 为每个测试用例创建一个job，包含测试用例名称
-          matrix = {'include': [{'test_name': case['name'], 'test_index': i} for i, case in enumerate(test_cases)]}
+          
+          # 为每个测试用例创建矩阵项，包含系统版本信息
+          matrix = {'include': []}
+          for i, case in enumerate(test_cases):
+              target_os = case.get('target_os_version', 'default')
+              matrix['include'].append({
+                  'test_name': case['name'],
+                  'test_index': i,
+                  'os_version': target_os
+              })
+          
           print('matrix=' + json.dumps(matrix))
           " >> $GITHUB_OUTPUT
 
   test-install:
     needs: generate-test-matrix
     strategy:
-      matrix: ${{ fromJSON(needs.generate-test-matrix.outputs.matrix) }}
+      matrix: 
+        include: ${{ fromJSON(needs.generate-test-matrix.outputs.matrix) }}
+      max-parallel: 2  # 限制同时运行的job数量
     runs-on: ubuntu-latest
 
     steps:
