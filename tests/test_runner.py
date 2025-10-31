@@ -10,6 +10,13 @@ import json
 import re
 import argparse
 
+# 尝试导入select模块，用于非阻塞I/O操作
+try:
+    import select
+    HAVE_SELECT = True
+except ImportError:
+    HAVE_SELECT = False
+
 # 将项目根目录添加到 Python 路径中，以便能找到 tools 模块
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 
@@ -285,17 +292,83 @@ def run_install_test(test_case):
             env={**os.environ, 'FISH_INSTALL_CONFIG': '../fish_install.yaml'}
         )
         
-        # 实时打印输出
+        # 实时打印输出，添加3分钟无日志超时检测
         print("=== 脚本输出开始 ===")
-        while True:
-            output_line = process.stdout.readline()
-            if output_line == '' and process.poll() is not None:
-                break
-            if output_line:
-                print(output_line.strip())
-                output += output_line
-                # 确保实时刷新输出
-                sys.stdout.flush()
+        last_output_time = time.time()
+        timeout_seconds = 180  # 3分钟超时
+        
+        if HAVE_SELECT:
+            # 在支持select的系统上使用非阻塞I/O
+            while True:
+                # 检查是否超时
+                if time.time() - last_output_time > timeout_seconds:
+                    print(f"错误: 测试 {name} 超时，超过 {timeout_seconds} 秒无日志输出，自动退出")
+                    # 终止进程
+                    process.terminate()
+                    try:
+                        process.wait(timeout=10)  # 等待最多10秒优雅退出
+                    except subprocess.TimeoutExpired:
+                        process.kill()  # 强制杀死进程
+                        process.wait()
+                    output += f"\n错误: 测试超时，超过 {timeout_seconds} 秒无日志输出，自动退出"
+                    return False, output
+                
+                # 检查进程是否已经结束
+                if process.poll() is not None:
+                    # 读取剩余的所有输出
+                    remaining_output = process.stdout.read()
+                    if remaining_output:
+                        print(remaining_output.strip())
+                        output += remaining_output
+                        last_output_time = time.time()  # 更新最后输出时间
+                    break
+                
+                # 非阻塞读取输出
+                if select.select([process.stdout], [], [], 0.1)[0]:
+                    output_line = process.stdout.readline()
+                    if output_line:
+                        print(output_line.strip())
+                        output += output_line
+                        last_output_time = time.time()  # 更新最后输出时间
+                        # 确保实时刷新输出
+                        sys.stdout.flush()
+                    elif process.poll() is not None:
+                        # 进程结束且没有更多输出
+                        break
+                else:
+                    # 没有可读取的数据，短暂休眠
+                    time.sleep(0.1)
+        else:
+            # 在不支持select的系统上使用标准方法（如Windows）
+            while True:
+                # 检查是否超时
+                if time.time() - last_output_time > timeout_seconds:
+                    print(f"错误: 测试 {name} 超时，超过 {timeout_seconds} 秒无日志输出，自动退出")
+                    # 终止进程
+                    process.terminate()
+                    try:
+                        process.wait(timeout=10)  # 等待最多10秒优雅退出
+                    except subprocess.TimeoutExpired:
+                        process.kill()  # 强制杀死进程
+                        process.wait()
+                    output += f"\n错误: 测试超时，超过 {timeout_seconds} 秒无日志输出，自动退出"
+                    return False, output
+                
+                # 检查进程是否已经结束
+                if process.poll() is not None:
+                    break
+                
+                # 使用poll方法检查是否有数据可读
+                output_line = process.stdout.readline()
+                if output_line:
+                    print(output_line.strip())
+                    output += output_line
+                    last_output_time = time.time()  # 更新最后输出时间
+                    # 确保实时刷新输出
+                    sys.stdout.flush()
+                else:
+                    # 没有输出，短暂休眠
+                    time.sleep(0.1)
         print("=== 脚本输出结束 ===")
         
         # 等待进程结束，超时时间为 2 小时
