@@ -7,10 +7,38 @@ on:
     branches: [ dev, master, github_ci_docker_test ]
 
 jobs:
+  generate-test-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+      - name: Generate test matrix
+        id: set-matrix
+        run: |
+          python -c "
+          import yaml
+          import json
+          with open('tests/fish_install_test.yaml', 'r') as f:
+              test_cases = yaml.safe_load(f)
+          # 为每个测试用例创建一个job，包含测试用例名称
+          matrix = {'include': [{'test_name': case['name'], 'test_index': i} for i, case in enumerate(test_cases)]}
+          print('matrix=' + json.dumps(matrix))
+          " >> $GITHUB_OUTPUT
+
   test-install:
+    needs: generate-test-matrix
     strategy:
-      matrix:
-        ubuntu_version: [18.04, 20.04, 22.04, 24.04]
+      matrix: ${{ fromJSON(needs.generate-test-matrix.outputs.matrix) }}
     runs-on: ubuntu-latest
 
     steps:
@@ -19,10 +47,20 @@ jobs:
 
     - name: Run tests in Docker container
       run: |
+        # 获取测试用例的target_os_version
+        TEST_CASE=$(python3 -c "
+        import yaml
+        with open('tests/fish_install_test.yaml', 'r') as f:
+            test_cases = yaml.safe_load(f)
+        case = test_cases[${{ matrix.test_index }}]
+        print(case.get('target_os_version', 'focal'))  # 默认使用focal
+        ")
+        echo "Using Ubuntu version: $TEST_CASE"
+        
         docker run --rm \
           -v ${{ github.workspace }}:${{ github.workspace }} \
           -w ${{ github.workspace }} \
-          ubuntu:${{ matrix.ubuntu_version }} \
+          ubuntu:$TEST_CASE \
           bash -c "
             set -u && 
             export DEBIAN_FRONTEND=noninteractive &&
@@ -39,13 +77,13 @@ jobs:
             pip install --upgrade pip &&
             pip install pyyaml distro &&
             cd tests && 
-            PYTHONIOENCODING=utf-8 python3 -u test_runner.py
+            PYTHONIOENCODING=utf-8 python3 -u test_runner.py --target-os-version $TEST_CASE
           "
     - name: Upload test reports
       uses: actions/upload-artifact@v4
       if: always()
       with:
-        name: test-reports-ubuntu-${{ matrix.ubuntu_version }}
+        name: test-reports-${{ matrix.test_name }}
         path: |
           tests/test_report.json
           tests/test_report.html
