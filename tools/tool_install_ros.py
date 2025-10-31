@@ -125,7 +125,7 @@ ros_dist_dic = {
 
 
 ros2_dist_dic = {
-    'bionic': {"tsinghua", "huawei", "packages.ros", "https.packages.ros"},  # 移除了ustc，因为USTC镜像站的ROS2目录中不包含bionic版本
+    'bionic': {"tsinghua", "ustc", "huawei", "packages.ros", "https.packages.ros"},
     'bullseye': {"tsinghua", "ustc", "huawei", "packages.ros", "https.packages.ros"},
     'buster': {"tsinghua", "ustc", "huawei", "packages.ros", "https.packages.ros"},
     'cosmic': {"packages.ros", "https.packages.ros"},
