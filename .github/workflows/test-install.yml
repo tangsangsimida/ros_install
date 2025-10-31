@@ -143,7 +143,7 @@ jobs:
             pip install --upgrade pip &&
             pip install pyyaml distro &&
             cd tests && 
-            PYTHONIOENCODING=utf-8 python3 -u test_runner.py --target-os-version $TEST_CASE
+            PYTHONIOENCODING=utf-8 python3 -u test_runner.py --target-os-version $TEST_CASE --test-index ${{ matrix.test_index }}
           "
     - name: Upload test reports
       uses: actions/upload-artifact@v4
@@ -192,7 +192,7 @@ jobs:
             pip install --upgrade pip &&
             pip install pyyaml distro &&
             cd tests && 
-            PYTHONIOENCODING=utf-8 python3 -u test_runner.py --target-os-version $TEST_CASE
+            PYTHONIOENCODING=utf-8 python3 -u test_runner.py --target-os-version $TEST_CASE --test-index ${{ matrix.test_index }}
           "
     - name: Upload test reports
       uses: actions/upload-artifact@v4
@@ -241,7 +241,7 @@ jobs:
             pip install --upgrade pip &&
             pip install pyyaml distro &&
             cd tests && 
-            PYTHONIOENCODING=utf-8 python3 -u test_runner.py --target-os-version $TEST_CASE
+            PYTHONIOENCODING=utf-8 python3 -u test_runner.py --target-os-version $TEST_CASE --test-index ${{ matrix.test_index }}
           "
     - name: Upload test reports
       uses: actions/upload-artifact@v4
@@ -290,7 +290,7 @@ jobs:
             pip install --upgrade pip &&
             pip install pyyaml distro &&
             cd tests && 
-            PYTHONIOENCODING=utf-8 python3 -u test_runner.py --target-os-version $TEST_CASE
+            PYTHONIOENCODING=utf-8 python3 -u test_runner.py --target-os-version $TEST_CASE --test-index ${{ matrix.test_index }}
           "
     - name: Upload test reports
       uses: actions/upload-artifact@v4

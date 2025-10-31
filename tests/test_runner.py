@@ -356,6 +356,7 @@ def main():
     # 解析命令行参数
     parser = argparse.ArgumentParser(description='运行一键安装工具测试')
     parser.add_argument('--target-os-version', type=str, help='目标Ubuntu版本代号 (例如: bionic, focal, jammy, noble)')
+    parser.add_argument('--test-index', type=int, help='特定测试用例的索引')
     args = parser.parse_args()
     
     target_os_version = args.target_os_version
@@ -396,6 +397,23 @@ def main():
         test_cases = [tc for tc in all_test_cases if 'target_os_version' not in tc]
         if not test_cases:
             print("错误: 没有找到适用于所有系统的通用测试用例")
+            sys.exit(1)
+    
+    # 如果指定了测试用例索引，则只运行该索引的测试用例
+    if args.test_index is not None:
+        # 直接根据索引在所有测试用例中查找
+        if 0 <= args.test_index < len(all_test_cases):
+            target_test_case = all_test_cases[args.test_index]
+            # 确保该测试用例适用于当前系统版本
+            if (target_test_case.get('target_os_version') == target_os_version or 
+                (target_os_version and 'target_os_version' not in target_test_case)):
+                test_cases = [target_test_case]
+                print(f"只运行指定索引的测试用例: {target_test_case.get('name', 'Unknown Test')}")
+            else:
+                print(f"错误: 索引为 {args.test_index} 的测试用例不适用于系统版本 {target_os_version}")
+                sys.exit(1)
+        else:
+            print(f"错误: 测试用例索引 {args.test_index} 超出范围 (0-{len(all_test_cases)-1})")
             sys.exit(1)
     
     print(f"共找到 {len(test_cases)} 个适用于当前系统版本的测试用例")
