@@ -14,7 +14,7 @@
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
     - { choose: 1, desc: "中科大源" }
-    - { choose: 1, desc: "支持的第1个ros版本" }       # 中科大源不支持Ubuntu18.04安装ros2
+    - { choose: 5, desc: "支持的第5个ros版本" }       # 中科大源不支持Ubuntu18.04安装ros2-bouncy
     - { choose: 2, desc: "基础版(小)" }
 
 - name: "Install_ROS_bionic_source2"
@@ -23,7 +23,7 @@
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
     - { choose: 2, desc: "清华源" }
-    - { choose: 1, desc: "支持的第1个ros版本" }
+    - { choose: 5, desc: "支持的第5个ros版本" }
     - { choose: 2, desc: "基础版(小)" }
 
 - name: "Install_ROS_bionic_source3"
@@ -32,7 +32,7 @@
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
     - { choose: 3, desc: "华为源" }
-    - { choose: 1, desc: "支持的第1个ros版本" }
+    - { choose: 5, desc: "支持的第5个ros版本" }
     - { choose: 2, desc: "基础版(小)" }
 
 - name: "Install_ROS_bionic_source4"
@@ -41,7 +41,7 @@
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
     - { choose: 4, desc: "中山大学源" }
-    - { choose: 1, desc: "支持的第1个ros版本" }
+    - { choose: 5, desc: "支持的第5个ros版本" }
     - { choose: 2, desc: "基础版(小)" }
 
 - name: "Install_ROS_bionic_source5"
@@ -50,7 +50,7 @@
     - { choose: 1, desc: "一键安装(推荐):ROS(支持ROS/ROS2,树莓派Jetson)" }
     - { choose: 2, desc: "不更换系统源再继续安装" }
     - { choose: 5, desc: "ROS官方源" }
-    - { choose: 1, desc: "支持的第1个ros版本" }
+    - { choose: 5, desc: "支持的第5个ros版本" }
     - { choose: 2, desc: "基础版(小)" }
 
 ##################################################################################################################################################################
