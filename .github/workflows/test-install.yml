@@ -112,6 +112,7 @@ jobs:
     strategy:
       matrix: ${{ fromJSON(needs.generate-test-matrix-by-os.outputs.bionic_matrix) }}
       max-parallel: 2
+      fail-fast: false  # 即使某些测试失败，也继续运行其他测试
     runs-on: ubuntu-latest
 
     steps:
@@ -161,6 +162,7 @@ jobs:
     strategy:
       matrix: ${{ fromJSON(needs.generate-test-matrix-by-os.outputs.focal_matrix) }}
       max-parallel: 2
+      fail-fast: false  # 即使某些测试失败，也继续运行其他测试
     runs-on: ubuntu-latest
 
     steps:
@@ -210,6 +212,7 @@ jobs:
     strategy:
       matrix: ${{ fromJSON(needs.generate-test-matrix-by-os.outputs.jammy_matrix) }}
       max-parallel: 2
+      fail-fast: false  # 即使某些测试失败，也继续运行其他测试
     runs-on: ubuntu-latest
 
     steps:
@@ -259,6 +262,7 @@ jobs:
     strategy:
       matrix: ${{ fromJSON(needs.generate-test-matrix-by-os.outputs.noble_matrix) }}
       max-parallel: 2
+      fail-fast: false  # 即使某些测试失败，也继续运行其他测试
     runs-on: ubuntu-latest
 
     steps:

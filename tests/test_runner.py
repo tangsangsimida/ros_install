@@ -548,12 +548,14 @@ def main():
     print(f"失败: {failed}")
     print(f"总计: {len(test_cases)}")
     
+    # 根据是否有测试失败，设置适当的退出码
+    # 在并行测试环境中，这将由每个单独的job处理
     if failed > 0:
         print("部分测试失败，请检查日志和测试报告。")
-        sys.exit(1)
+        sys.exit(1)  # 有测试失败，返回非零退出码
     else:
         print("所有测试通过！")
-        sys.exit(0)
+        sys.exit(0)  # 所有测试通过，返回零退出码
 
 if __name__ == "__main__":
     main()

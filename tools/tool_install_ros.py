@@ -123,7 +123,7 @@ ros_dist_dic = {
 
 
 ros2_dist_dic = {
-    'bionic': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'bionic': {"tsinghua", "mirrorz", "huawei", "packages.ros", },
     'bullseye': {"tsinghua", "ustc", "huawei", "packages.ros", },
     'buster': {"tsinghua", "ustc", "huawei", "packages.ros", },
     'cosmic': {"packages.ros", },
