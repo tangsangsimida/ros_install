@@ -111,7 +111,7 @@ jobs:
     if: ${{ needs.generate-test-matrix-by-os.outputs.bionic_matrix != '{}' }}
     strategy:
       matrix: ${{ fromJSON(needs.generate-test-matrix-by-os.outputs.bionic_matrix) }}
-      max-parallel: 2
+      # max-parallel: 2
       fail-fast: false  # 即使某些测试失败，也继续运行其他测试
     runs-on: ubuntu-latest
 
