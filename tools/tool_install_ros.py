@@ -58,9 +58,10 @@ class RosVersions:
     @staticmethod
     def install_depend(name):
         depends = RosVersions.get_version(name).deps
-        for dep in depends:
-            AptUtils.install_pkg(dep)
-
+        if depends:
+            # 批量安装依赖包，提高效率
+            dep_string = " ".join(depends)
+            AptUtils.install_pkg(dep_string)
 
     @staticmethod
     def tip_test_command(name):
@@ -94,49 +95,51 @@ ros_mirror_dic = {
 
 
 ros_dist_dic = {
-    'artful': {"packages.ros", },
+    'artful': {"tsinghua", "ustc", "huawei", "packages.ros", },
     'bionic': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
+    'buster': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
+    'cosmic': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'disco': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'eoan': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'focal': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
+    'jessie': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
+    'lucid': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'maverick': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'natty': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'oneiric': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'precise': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'quantal': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'raring': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'saucy': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'stretch': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
+    'trusty': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
+    'utopic': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'vivid': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'wheezy': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'wily': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'xenial': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
+    'yakkety': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'zesty': {"tsinghua", "ustc", "huawei", "packages.ros", },
+}
+
+
+ros2_dist_dic = {
+    'bionic': {"tsinghua", "mirrorz", "huawei", "packages.ros", },
+    'bookworm': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
+    'bullseye': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
     'buster': {"tsinghua", "ustc", "huawei", "packages.ros", },
     'cosmic': {"packages.ros", },
     'disco': {"packages.ros", },
     'eoan': {"packages.ros", },
     'focal': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
     'jessie': {"tsinghua", "ustc", "huawei", "packages.ros", },
-    'lucid': {"packages.ros", },
-    'maverick': {"packages.ros", },
-    'natty': {"packages.ros", },
-    'oneiric': {"packages.ros", },
-    'precise': {"packages.ros", },
-    'quantal': {"packages.ros", },
-    'raring': {"packages.ros", },
-    'saucy': {"packages.ros", },
-    'stretch': {"tsinghua", "ustc", "huawei", "packages.ros", },
-    'trusty': {"tsinghua", "ustc", "huawei", "packages.ros", },
-    'utopic': {"packages.ros", },
-    'vivid': {"packages.ros", },
-    'wheezy': {"packages.ros", },
-    'wily': {"packages.ros", },
-    'xenial': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
-    'yakkety': {"packages.ros", },
-    'zesty': {"packages.ros", },
-}
-
-
-ros2_dist_dic = {
-    'bionic': {"tsinghua", "mirrorz", "huawei", "packages.ros", },
-    'bullseye': {"tsinghua", "ustc", "huawei", "packages.ros", },
-    'buster': {"tsinghua", "ustc", "huawei", "packages.ros", },
-    'cosmic': {"packages.ros", },
-    'disco': {"packages.ros", },
-    'eoan': {"packages.ros", },
-    'focal': {"tsinghua", "ustc", "huawei", "packages.ros", },
-    'jessie': {"tsinghua", "ustc", "huawei", "packages.ros", },
     'jammy': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
     'noble': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
     'stretch': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'trixie': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
     'trusty': {"tsinghua", "ustc", "huawei", "packages.ros", },
+    'xenial': {"tsinghua", "ustc", "huawei", "mirrorz", "packages.ros", },
     'utopic': {"packages.ros", },
-    'xenial': {"packages.ros", },
     'yakkety': {"packages.ros", },
     'zesty': {"packages.ros", },
 }
